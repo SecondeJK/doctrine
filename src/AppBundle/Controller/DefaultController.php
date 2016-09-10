@@ -38,4 +38,21 @@ class DefaultController extends Controller
         'SCRIPT TO CREATE BUG'
       );
     }
+
+    /**
+     * @Route("/fetch", name="fetchBug")
+     */
+    public function fetchAction(Request $request)
+    {
+      $doctrine_manager = $this->getDoctrine()->getManager();
+      $fetchBug = $this->getDoctrine()->getRepository('AppBundle:userBug')->find(5);
+      $result1 = $fetchBug->getBugGuid();
+
+      $fetchBug2 = $this->getDoctrine()->getRepository('AppBundle:userBug')->findOneBybug_guid('57d4066891a14');
+
+      return new Response (
+        'RETRIEVED OBJECT FOUND BY ID: ' . $result1 . '</br>' .
+        'FETCHED OBJECT BY GUID, ID = ' . $fetchBug2->getBugId()
+      );
+    }
 }
