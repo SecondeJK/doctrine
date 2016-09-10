@@ -25,11 +25,14 @@ class DefaultController extends Controller
      */
     public function createAction(Request $request)
     {
-
       $bug = new userBug;
-      $bug->setBugDescription('This is the inital bug to report from a controller');
+      $bug->setBugDescription('More data please');
       $bug->setBugGuid(uniqid());
-      $bug->setBugDate(date('Y-m-d H:i:s'));
+      $bug->setBugDate(new \DateTime('now'));
+
+      $doctrine_manager = $this->getDoctrine()->getManager();
+      $doctrine_manager->persist($bug);
+      $doctrine_manager->flush();
 
       return new Response (
         'SCRIPT TO CREATE BUG'
