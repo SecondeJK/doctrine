@@ -73,4 +73,20 @@ class DefaultController extends Controller
         'UPDATED FOLLOWING RECORD: ' . print_r($updateBug)
       );
     }
+
+    /**
+     * @Route("/delete/{id}", name="deleteBug")
+     */
+    public function deleteAction($id)
+    {
+      //update
+      $doctrine_manager = $this->getDoctrine()->getManager();
+      $updateBug = $this->getDoctrine()->getRepository('AppBundle:userBug')->findOneBybug_id($id);
+      $doctrine_manager->remove($updateBug);
+      $doctrine_manager->flush();
+
+      return new Response (
+        'DELETED FOLLOWING RECORD: ' . print_r($updateBug)
+      );
+    }
 }
