@@ -70,7 +70,7 @@ class DefaultController extends Controller
       $doctrine_manager->flush();
 
       return new Response (
-        'UPDATED FOLLOWING RECORD: ' . print_r($updateBug)
+        'UPDATED FOLLOWING RECORD: <pre>' . print_r($updateBug) . '</pre>'
       );
     }
 
@@ -86,7 +86,28 @@ class DefaultController extends Controller
       $doctrine_manager->flush();
 
       return new Response (
-        'DELETED FOLLOWING RECORD: ' . print_r($updateBug)
+        'DELETED FOLLOWING RECORD: <pre>' . print_r($updateBug) . '</pre>'
+      );
+    }
+
+    /**
+     * @Route("/fetchdql", name="fetchByDQL")
+     */
+    public function dqlFetchAction()
+    {
+      //update
+      $doctrine_manager = $this->getDoctrine()->getManager();
+      $query = $doctrine_manager->createQuery(
+      'SELECT ub
+      FROM AppBundle:userBug ub
+      WHERE ub.bugId > :setmin
+      ORDER BY ub.bugId DESC'
+      )->setParameter('setmin', 5);
+
+      $results = $query->getResult();
+
+      return new Response (
+        'RETRIEVED FOLLOWING RECORD(s): <pre>' . print_r($results) . '</pre>'
       );
     }
 }
