@@ -25,6 +25,7 @@ class DefaultController extends Controller
      */
     public function createAction(Request $request)
     {
+      //create
       $bug = new userBug;
       $bug->setBugDescription('More data please');
       $bug->setBugGuid(uniqid());
@@ -40,12 +41,13 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/fetch", name="fetchBug")
+     * @Route("/fetch/{id}", name="fetchBug")
      */
-    public function fetchAction(Request $request)
+    public function fetchAction(Request $request, $id)
     {
+      //read
       $doctrine_manager = $this->getDoctrine()->getManager();
-      $fetchBug = $this->getDoctrine()->getRepository('AppBundle:userBug')->find(5);
+      $fetchBug = $this->getDoctrine()->getRepository('AppBundle:userBug')->find($id);
       $result1 = $fetchBug->getBugGuid();
 
       $fetchBug2 = $this->getDoctrine()->getRepository('AppBundle:userBug')->findOneBybug_guid('57d4066891a14');
@@ -53,6 +55,22 @@ class DefaultController extends Controller
       return new Response (
         'RETRIEVED OBJECT FOUND BY ID: ' . $result1 . '</br>' .
         'FETCHED OBJECT BY GUID, ID = ' . $fetchBug2->getBugId()
+      );
+    }
+
+    /**
+     * @Route("/update/{id}", name="updateBug")
+     */
+    public function updateAction($id)
+    {
+      //update
+      $doctrine_manager = $this->getDoctrine()->getManager();
+      $updateBug = $this->getDoctrine()->getRepository('AppBundle:userBug')->find($id);
+      $updateBug->setBugGuid(uniqid());
+      $doctrine_manager->flush();
+
+      return new Response (
+        'UPDATED FOLLOWING RECORD: ' . print_r($updateBug)
       );
     }
 }
