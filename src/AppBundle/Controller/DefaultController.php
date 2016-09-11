@@ -106,8 +106,20 @@ class DefaultController extends Controller
 
       $results = $query->getResult();
 
+      $repository = $doctrine_manager->getRepository('AppBundle:userBug');
+
+      // createQueryBuilder automatically selects FROM AppBundle:userBug
+      // and aliases it to "p"
+      $query2 = $repository->createQueryBuilder('ub')
+          ->where('ub.bugId <= :minno')
+          ->setParameter('minno', '2')
+          ->orderBy('ub.bugId', 'DESC')
+          ->getQuery();
+
+      $results2 = $query2->getResult();
+
       return new Response (
-        'RETRIEVED FOLLOWING RECORD(s): <pre>' . print_r($results) . '</pre>'
+        'RETRIEVED FOLLOWING RECORD(s): <pre>' . print_r($results2) . '</pre>'
       );
     }
 }
